@@ -20,7 +20,8 @@ export class StudentsComponent implements OnInit {
     'dateOfBirth',
     'email',
     'mobile',
-    'gender'
+    'gender',
+    'edit'
   ];
 
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
@@ -35,7 +36,7 @@ export class StudentsComponent implements OnInit {
 
   ngOnInit(): void {
     //fetch students
-    this.studentService.getStudent().subscribe((successResponse)=>{
+    this.studentService.getStudents().subscribe((successResponse)=>{
       this.students = successResponse;
       this.dataSource = new MatTableDataSource<Student>(this.students);
 
