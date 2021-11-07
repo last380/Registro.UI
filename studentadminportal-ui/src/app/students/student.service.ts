@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { AddStudentRequest } from '../Models/api-models/add-student-request.model';
 import { Student } from '../Models/api-models/student.model';
 import { UpdateStudentRequest } from '../Models/api-models/update-student-request.model';
@@ -10,7 +11,7 @@ import { UpdateStudentRequest } from '../Models/api-models/update-student-reques
 })
 export class StudentService {
 
-  private baseApiUrl = 'https://localhost:44384'
+  private baseApiUrl = environment.baseApiUrl;
 
   constructor(private httpClient: HttpClient) {  }
 
