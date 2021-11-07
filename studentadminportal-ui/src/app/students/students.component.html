@@ -6,6 +6,7 @@
 
 <div class="container">
 
+  <!-- search and add -->
   <div class="row end-xs mt-1">
     <div class="col-xs-12">
       <input
@@ -15,6 +16,7 @@
         [(ngModel)]="filterString"
         (keyup) = "filterStudent()"
       >
+      <a routerLink="/students/add" mat-raised-button color="primary" class="ml-1">Add New Student</a>
     </div>
   </div>
 
