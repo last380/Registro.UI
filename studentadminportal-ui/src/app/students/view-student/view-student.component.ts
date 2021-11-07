@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Gender } from 'src/app/Models/ui-models/gender.model';
@@ -38,6 +39,8 @@ export class ViewStudentComponent implements OnInit {
   displayProfileImageUrl='';
 
   genderList: Gender[] = [];
+
+  @ViewChild('studentDetailsForm') studentDetailsForm?: NgForm;
 
   constructor(
     private readonly studentService: StudentService,
@@ -91,7 +94,9 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onAdd(): void{
-    this.studentService.addStudent(this.student)
+
+    if(this.studentDetailsForm?.form.valid){
+      this.studentService.addStudent(this.student)
       .subscribe(
         (successResponse)=>{
           this.snackbar.open('Student Added Successfully', undefined, {
@@ -103,15 +108,19 @@ export class ViewStudentComponent implements OnInit {
           });
         },
         (errorResponse)=>{
-          console.log("Error...");
+          console.log(errorResponse);
           console.log(this.student);
         }
       );
+    }
+
+
   }
 
   onUpdate(): void{
 
-    this.studentService.updateStudent(this.student.id, this.student)
+    if(this.studentDetailsForm?.form.valid){
+      this.studentService.updateStudent(this.student.id, this.student)
       .subscribe(
         (successResponse)=>{
           this.snackbar.open('Student Updated Successfully', undefined, {
@@ -122,6 +131,8 @@ export class ViewStudentComponent implements OnInit {
           console.log(errorResponse);
         }
       );
+    }
+
   }
 
   onDelete(): void{
