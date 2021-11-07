@@ -35,6 +35,7 @@ export class ViewStudentComponent implements OnInit {
 
   isNewStudent = false;
   header = '';
+  displayProfileImageUrl='';
 
   genderList: Gender[] = [];
 
@@ -44,7 +45,9 @@ export class ViewStudentComponent implements OnInit {
     private readonly genderService: GenderService,
     private snackbar: MatSnackBar,
     private router: Router
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(
@@ -57,6 +60,7 @@ export class ViewStudentComponent implements OnInit {
               //-> new student add form
               this.isNewStudent=true;
               this.header='Add New Student';
+              this.setImage();
           }
           else{
             //->view student functionality
@@ -67,6 +71,10 @@ export class ViewStudentComponent implements OnInit {
             this.studentService.getStudent(this.studentId).subscribe(
               (successResponse)=>{
                 this.student = successResponse;
+                this.setImage();
+              },
+              (errorResponse)=>{
+                this.setImage();
               }
             );
           }
@@ -133,6 +141,39 @@ export class ViewStudentComponent implements OnInit {
           console.log(errorResponse);
         }
       );
+  }
+
+  private setImage(): void {
+    if (this.student.profileImageUrl) {
+      this.displayProfileImageUrl = this.studentService.getImagePath(this.student.profileImageUrl);
+    } else {
+      // Display a default
+      this.displayProfileImageUrl='/assets/user.jpg';
+    }
+  }
+
+  uploadImage(event: any): void {
+    if (this.studentId) {
+      const file: File = event.target.files[0];
+      this.studentService.uploadImage(this.student.id, file)
+        .subscribe(
+          (successResponse) => {
+            this.student.profileImageUrl = successResponse;
+            this.setImage();
+
+            // Show a notification
+            this.snackbar.open('Profile Image Updated', undefined, {
+              duration: 2000
+            });
+
+          },
+          (errorResponse) => {
+
+          }
+        );
+
+    }
+
   }
 
 }
